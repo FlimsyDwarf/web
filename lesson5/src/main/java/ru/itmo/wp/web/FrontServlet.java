@@ -10,23 +10,25 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Array;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FrontServlet extends HttpServlet {
     private static final String BASE_PACKAGE = FrontServlet.class.getPackage().getName() + ".page";
     private static final String DEFAULT_ACTION = "action";
+    private static final String TEMPLATE_EXTENSION = ".ftlh";
+    private static final Locale DEFAULT_LOCALE = new Locale("ru");
 
     private Configuration sourceConfiguration;
     private Configuration targetConfiguration;
+
 
     private Configuration newFreemarkerConfiguration(String templateDirName, boolean debug)
             throws ServletException {
@@ -47,6 +49,8 @@ public class FrontServlet extends HttpServlet {
                 TemplateExceptionHandler.RETHROW_HANDLER);
         configuration.setLogTemplateExceptions(false);
         configuration.setWrapUncheckedExceptions(true);
+        configuration.setLocale(Locale.ENGLISH);
+        //configuration.setLocale(DEFAULT_LOCALE);
 
         return configuration;
     }
@@ -94,12 +98,27 @@ public class FrontServlet extends HttpServlet {
             throw new NotFoundException();
         }
 
+        HttpSession session = request.getSession();
+        if ("en".equals(request.getParameter("lang"))) {
+            session.setAttribute("lang", "en");
+        } else {
+            session.setAttribute("lang", "ru");
+        }
+
         Method method = null;
+        Map<String, Object> view = new HashMap<>();
+        Map<Class<?>, Object> signature = new HashMap<>();
+        signature.put(HttpServletRequest.class, request);
+        signature.put(Map.class, view);
+        ArrayList<Object> parameters = new ArrayList<>();
         for (Class<?> clazz = pageClass; method == null && clazz != null; clazz = clazz.getSuperclass()) {
-            try {
-                method = clazz.getDeclaredMethod(route.getAction(), HttpServletRequest.class, Map.class);
-            } catch (NoSuchMethodException ignored) {
-                // No operations.
+            for (Method cur_method : clazz.getDeclaredMethods()) {
+                    for (Class<?> parameter : cur_method.getParameterTypes()) {
+                        if (signature.containsKey(parameter)) {
+                            parameters.add(signature.get(parameter));
+                            method = cur_method;
+                        }
+                }
             }
         }
 
@@ -116,10 +135,9 @@ public class FrontServlet extends HttpServlet {
                     + pageClass + "]");
         }
 
-        Map<String, Object> view = new HashMap<>();
         method.setAccessible(true);
         try {
-            method.invoke(page, request, view);
+            method.invoke(page, parameters.toArray());
         } catch (IllegalAccessException e) {
             throw new ServletException("Can't invoke action method [pageClass="
                     + pageClass + ", method=" + method + "]");
@@ -134,8 +152,13 @@ public class FrontServlet extends HttpServlet {
                         + pageClass + ", method=" + method + "]", cause);
             }
         }
-
-        Template template = newTemplate(pageClass.getSimpleName() + ".ftlh");
+        Template template;
+        try {
+            template = sourceConfiguration.getTemplate(pageClass.getSimpleName()
+                    + '_' + session.getAttribute("lang") + ".ftlh");
+        } catch (TemplateNotFoundException ignored) {
+            template = newTemplate(pageClass.getSimpleName() + ".ftlh");
+        }
         response.setContentType("text/html");
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         try {
