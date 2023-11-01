@@ -99,9 +99,10 @@ public class FrontServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        if ("en".equals(request.getParameter("lang"))) {
-            session.setAttribute("lang", "en");
-        } else {
+        final String lang = request.getParameter("lang");
+        if (lang != null && lang.length() == 2) {
+            session.setAttribute("lang", lang);
+        } else if (session.getAttribute("lang") == null) {
             session.setAttribute("lang", "ru");
         }
 
@@ -113,11 +114,19 @@ public class FrontServlet extends HttpServlet {
         ArrayList<Object> parameters = new ArrayList<>();
         for (Class<?> clazz = pageClass; method == null && clazz != null; clazz = clazz.getSuperclass()) {
             for (Method cur_method : clazz.getDeclaredMethods()) {
+                if (method != null) {
+                    break;
+                }
+                System.out.println("######" + route.action);
+                System.out.println(cur_method.getName());
+                if (cur_method.getName().equals(route.action)) {
+
                     for (Class<?> parameter : cur_method.getParameterTypes()) {
                         if (signature.containsKey(parameter)) {
                             parameters.add(signature.get(parameter));
                             method = cur_method;
                         }
+                    }
                 }
             }
         }
