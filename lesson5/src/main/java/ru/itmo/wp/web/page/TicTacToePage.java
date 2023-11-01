@@ -2,11 +2,11 @@ package ru.itmo.wp.web.page;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.View;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 
 public class TicTacToePage {
-
     private static final int BOARD_SIZE = 3;
      private enum Phase {
         RUNNING,
@@ -70,8 +70,8 @@ public class TicTacToePage {
             newGame(request, view);
             return;
         }
-        for (Map.Entry param : request.getParameterMap().entrySet()) {
-            String key = (String) param.getKey();
+        for (Entry<String, String[]> param : request.getParameterMap().entrySet()) {
+            String key = param.getKey();
             if (key.startsWith("cell")) {
                 y = key.charAt(key.length() - 1) - '0';
                 x = key.charAt(key.length() - 2) - '0';
@@ -86,7 +86,7 @@ public class TicTacToePage {
 
 
     private static void makeMove(State state, int x, int y) {
-        if (state.phase != "RUNNING") {
+        if (!Objects.equals(state.phase, "RUNNING")) {
             return;
         }
         if (x < 0 || x > state.size - 1 || y < 0 || y > state.size - 1
@@ -105,35 +105,8 @@ public class TicTacToePage {
     }
 
     private static boolean checkWinner(final State state, int x, int y) {
-        final char playerSign = state.crossesMove ? 'X' : 'O';
-        int cntRow = 0;
-        int cntCol = 0;
-        int cntMainDiag = 0;
-        int cntSideDiag = 0;
-
-//        for (int delt = 1; delt < state.size; delt++) {
-//            int cur_x1 = x + delt;
-//            int cur_x2 = x - delt;
-//            if (cur_x1 < state.size) {
-//                cntRow += (state.cells[x + delt][y] == playerSign ? 1 : 0);
-//
-//            }
-//            cntRow += (state.cells[x + delt][y] == playerSign ? 1 : 0) +
-//                    (state.cells[x - delt][y] == playerSign ? 1 : 0);
-//
-//            cntCol += (state.cells[x][y + delt] == playerSign ? 1 : 0) +
-//                    (state.cells[x][y - delt] == playerSign ? 1 : 0);
-//
-//            cntMainDiag += (state.cells[x + delt][y + delt] == playerSign ? 1 : 0) +
-//                    (state.cells[x - delt][y - delt] == playerSign ? 1 : 0);
-//
-//            cntSideDiag += (state.cells[x + delt][y - delt] == playerSign ? 1 : 0) +
-//                    (state.cells[x - delt][y + delt] == playerSign ? 1 : 0);
-//        }
         return check(state, 0, y, 1, 0) || check(state, x, 0, 0, 1) ||
                 check(state, 0, 0, 1, 1) || check(state, state.size - 1, 0, -1, -1);
-//        return cntRow == state.size || cntCol == state.size ||
-//                cntMainDiag == state.size || cntSideDiag == state.size;
     }
 
     private static boolean check(State state, int x, int y, int deltX, int deltY) {
