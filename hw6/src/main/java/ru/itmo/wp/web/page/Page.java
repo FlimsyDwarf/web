@@ -19,10 +19,11 @@ public class Page {
 		this.request = request;
 		putUserCount(view);
 		putUser(view);
+		putMessage(view);
 	}
 
 	public void after(HttpServletRequest request, Map<String, Object> view) {
-		putMessage(view);
+		//putMessage(view);
 	}
 
 

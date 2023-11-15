@@ -28,7 +28,7 @@ public class TalkService {
 	}
 
 	public void validateText(String text) throws ValidationException {
-		if (Strings.isNullOrEmpty(text)) {
+		if (Strings.isNullOrEmpty(text.trim())) {
 			throw new ValidationException("Message can't be empty");
 		}
 		if (text.length() > 255) {

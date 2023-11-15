@@ -38,6 +38,10 @@ public class TalksPage extends Page {
 		User user = (User) session.getAttribute("user");
 		String targetUserId = request.getParameter("targetUserId");
 		String text = request.getParameter("text");
+		if (user == null) {
+			setMessage("You must be logged in to send the talks");
+			throw new RedirectException("/index");
+		}
 		try {
 			userService.validateById(user.getId());
 		} catch (ValidationException e) {
@@ -46,13 +50,14 @@ public class TalksPage extends Page {
 		}
 		try {
 			userService.validateById(Long.parseLong(targetUserId));
-		} catch (ValidationException e) {
+		} catch (ValidationException | NumberFormatException e) {
 			setMessage("User you try to send message to does not exist");
 			throw new RedirectException("/talks");
 		}
-		try {
+        try {
 			talkService.validateText(text);
 		} catch (ValidationException e) {
+			setMessage("text can't be blank");
 			throw new RedirectException("/talks");
 		}
 		talk.setSourceUserId(String.valueOf(user.getId()));
