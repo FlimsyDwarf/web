@@ -32,7 +32,7 @@
             const $noData = $(".articles .noData");
             $noData.text("Loading...")
             ajax({
-                action: "findAll"
+                action: "findAllNotHidden"
             },
                 $error,
                 function (response) {

@@ -84,4 +84,9 @@ public class ArticleRepositoryImpl extends BasicRepositoryImpl<Article>  impleme
 //		return super.changeField(sqlRequest, !current.isHidden(), id);
 	}
 
+	@Override
+	public List<Article> findAllNotHidden() {
+		return super.findAllBy("WHERE HIDDEN=0");
+	}
+
 }

@@ -57,6 +57,8 @@ public class UserRepositoryImpl extends BasicRepositoryImpl<User> implements Use
                 case "creationTime":
                     user.setCreationTime(resultSet.getTimestamp(i));
                     break;
+                case "admin":
+                    user.setAdmin(resultSet.getBoolean(i));
                 default:
                     // No operations.
             }
@@ -73,8 +75,15 @@ public class UserRepositoryImpl extends BasicRepositoryImpl<User> implements Use
     }
 
     @Override
+    public void changeAdmin(long id, boolean admin) {
+        String sqlRequest = "UPDATE User SET admin = ? WHERE id=?";
+        super.changeField(sqlRequest, admin, id);
+    }
+
+    @Override
     public String getTableName() {
         return "User";
     }
+
 
 }

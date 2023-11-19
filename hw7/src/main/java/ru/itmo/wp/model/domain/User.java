@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class User extends Entity {
     private String login;
     private String email;
+    private Boolean admin;
 
     public String getLogin() {
         return login;
@@ -18,5 +19,13 @@ public class User extends Entity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }

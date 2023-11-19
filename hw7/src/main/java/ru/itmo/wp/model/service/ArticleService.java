@@ -58,4 +58,11 @@ public class ArticleService {
 		articleRepository.changeHidden(id, hidden);
 	}
 
+	public Article findByArticleId(long articleId) {
+		return articleRepository.findById(articleId);
+	}
+
+	public List<Article> findAllNotHidden() {
+		return articleRepository.findAllNotHidden();
+	}
 }

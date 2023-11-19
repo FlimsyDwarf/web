@@ -12,4 +12,6 @@ public interface ArticleRepository extends BasicRepository<Article> {
 	Article findById(long id);
 
 	void changeHidden(long id, Boolean hidden);
+
+	List<Article> findAllNotHidden();
 }

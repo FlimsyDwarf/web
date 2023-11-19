@@ -22,4 +22,8 @@ public class IndexPage extends Page{
     private void findAll(HttpServletRequest request, Map<String, Object> view) {
         view.put("articles", articleService.findAll());
     }
+
+    private void findAllNotHidden(HttpServletRequest request, Map<String, Object> view) {
+        view.put("articles", articleService.findAllNotHidden());
+    }
 }

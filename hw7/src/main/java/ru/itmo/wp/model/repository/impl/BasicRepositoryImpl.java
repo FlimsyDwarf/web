@@ -29,9 +29,9 @@ public abstract class BasicRepositoryImpl<T extends Entity> implements BasicRepo
 	}
 
 	@Override
-	public T findBy(String sqlRequest, Object... parameters) {
+	public T findBy(String query, Object... parameters) {
 		try (Connection connection = DATA_SOURCE.getConnection()) {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getTableName() + " " + sqlRequest)) {
+			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getTableName() + " " + query)) {
 				setParameters(statement, parameters);
 				try (ResultSet resultSet = statement.executeQuery()) {
 					return toEntity(statement.getMetaData(), resultSet);
@@ -43,10 +43,10 @@ public abstract class BasicRepositoryImpl<T extends Entity> implements BasicRepo
 	}
 
 	@Override
-	public List<T> findAllBy(String sqlRequest, Object... parameters) {
+	public List<T> findAllBy(String query, Object... parameters) {
 		List<T> entities = new ArrayList<>();
 		try (Connection connection = DATA_SOURCE.getConnection()) {
-			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getTableName() + " " + sqlRequest)) {
+			try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getTableName() + " " + query)) {
 				setParameters(statement, parameters);
 				try (ResultSet resultSet = statement.executeQuery()) {
 					T entity;
@@ -80,11 +80,12 @@ public abstract class BasicRepositoryImpl<T extends Entity> implements BasicRepo
 		return entities;
 	}
 
+	@SuppressWarnings("SqlSourceToSinkFlow")
 	@Override
-	public void save(String sqlRequest, Entity entity, Object... parameters) {
+	public void save(String query, Entity entity, Object... parameters) {
 		try (Connection connection = DATA_SOURCE.getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(
-					sqlRequest,
+					query,
 					Statement.RETURN_GENERATED_KEYS)) {
 				setParameters(statement, parameters);
 				if (statement.executeUpdate() != 1) {
@@ -108,18 +109,18 @@ public abstract class BasicRepositoryImpl<T extends Entity> implements BasicRepo
 		}
 	}
 
-//	public void changeField(String sqlRequest, Object... parameters) {
-//		try (Connection connection = DATA_SOURCE.getConnection()) {
-//			try (PreparedStatement statement = connection.prepareStatement(sqlRequest) {
-//				setParameters(statement, parameters);
-//				try (ResultSet resultSet = statement.executeQuery()) {
-//					return toEntity(statement.getMetaData(), resultSet);
-//				}
-//			}
-//		} catch (SQLException e) {
-//			throw new RepositoryException("Can't find " + getTableName(), e);
-//		}
-//	}
+	public void changeField(String query, Object field, Object parameter) {
+		try (Connection connection = DATA_SOURCE.getConnection()) {
+			try (PreparedStatement statement = connection.prepareStatement(query)) {
+				setParameters(statement, field, parameter);
+				if (statement.executeUpdate() != 1) {
+					throw new RepositoryException("Can't save " + getTableName());
+				}
+			}
+		} catch (SQLException e) {
+			throw new RepositoryException("Can't find " + getTableName(), e);
+		}
+	}
 
 	public void setParameters(PreparedStatement statement, Object... parameters) throws SQLException {
 		for (int i = 0; i < parameters.length; i++) {

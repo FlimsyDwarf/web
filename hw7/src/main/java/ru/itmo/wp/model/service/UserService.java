@@ -73,6 +73,13 @@ public class UserService {
         }
     }
 
+    public void validateUser(User user) throws ValidationException {
+        if (user == null) {
+            throw new ValidationException("You are not logged in");
+        }
+        validateById(user.getId());
+    }
+
     public void validateByLoginOrEmail(String loginOrEmail) throws ValidationException {
         User userBylogin = userRepository.findByLogin(loginOrEmail);
         User userByEmail = userRepository.findByEmail(loginOrEmail);
@@ -106,5 +113,9 @@ public class UserService {
 
     public UserRepository getRepository() {
         return userRepository;
+    }
+
+    public void changeAdmin(long id, boolean admin) {
+        userRepository.changeAdmin(id, admin);
     }
 }

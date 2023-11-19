@@ -20,4 +20,6 @@ public interface UserRepository extends BasicRepository<User>{
     Long findCount();
 
     void save(User user, String passwordSha);
+
+    void changeAdmin(long id, boolean admin);
 }

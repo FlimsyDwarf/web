@@ -3,6 +3,7 @@ package ru.itmo.wp.web.page;
 import com.google.common.base.Strings;
 import org.checkerframework.checker.units.qual.A;
 import ru.itmo.wp.model.domain.User;
+import ru.itmo.wp.model.exception.ValidationException;
 import ru.itmo.wp.model.service.ArticleService;
 import ru.itmo.wp.model.service.EventService;
 import ru.itmo.wp.model.service.TalkService;

@@ -18,7 +18,6 @@
                     <td class="article-id">${article.id}</td>
                     <td class="article-title">${article.title}</td>
                     <td class="article-hidden">
-<#--                        <#if article.hidden>1<#else>0</#if>-->
                         <form method="post" action="changeHidden">
                             <input type="hidden" name="id" value="${article.id}"/>
                             <div class="button-field">
@@ -43,18 +42,18 @@
 
     <script>
         $(function () {
-            const $error = $(this).find(".error");
+            let $error = $(this).find(".error");
             $(".articles .article-hidden").submit(function () {
+                let $button = $(this).find("input[name='hidden']");
+                const hidden = $button.val();
                 const articleId = $(this).find("input[name='id']").val();
-                const hidden = $(this).find("input[name='hidden']").val();
 
-                ajax({action: "changeHidden", articleId: articleId, hidden: hidden}, $error,
+                ajax(
+                    {action: "changeHidden", articleId: articleId, hidden: hidden},
+                    $error,
                     function (response) {
-                        if (response["hidden"] === 0) {
-                            $(this).find("input[name='hidden']").attr("value", "Hide");
-                        } else if (response["hidden"] === 1) {
-                            $(this).find("input[name='hidden']").attr("value", "Show");
-                        }
+                        notify(response["message"]);
+                        $button.val(response["hidden"]);
                     });
                 return false;
             });

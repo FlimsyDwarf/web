@@ -42,20 +42,18 @@
 
     <script>
         $(function () {
-            const $error = $(this).find(".error");
+            let $error = $(this).find(".error");
             $(".articles .article-hidden").submit(function () {
-                const articleId = $(this).find("input[name='id']").val();
-                const $button = $(this).find("input[name='hidden']");
+                let $button = $(this).find("input[name='hidden']");
                 const hidden = $button.val();
+                const articleId = $(this).find("input[name='id']").val();
 
-                ajax({action: "changeHidden", articleId: articleId, hidden: hidden}, $error,
+                ajax(
+                    {action: "changeHidden", articleId: articleId, hidden: hidden},
+                    $error,
                     function (response) {
-                        notify("Show mode changed");
-                        if (response["hidden"] === 0) {
-                            $button.text("Hide");
-                        } else if (response["hidden"] === 1) {
-                            $button.text("Show");
-                        }
+                        notify(response["message"]);
+                        $button.val(response["hidden"]);
                     });
                 return false;
             });
