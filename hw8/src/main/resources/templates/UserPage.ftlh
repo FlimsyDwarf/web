@@ -30,5 +30,6 @@
                 No such user
             </div>
         </#if>
+<#--        <@c.error "user.id"/>-->
     </div>
 </@c.page>

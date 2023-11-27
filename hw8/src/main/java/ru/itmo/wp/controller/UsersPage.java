@@ -28,14 +28,15 @@ public class UsersPage extends Page {
     }
 
     @PostMapping("/users/all")
-    public String setDisabled(@RequestParam long id, Model model, HttpSession httpSession) {
+    public String setDisabled(@RequestParam long id, @RequestParam boolean disabled, HttpSession httpSession) {
         User user = userService.findById(id);
         if (user == null) {
             setMessage(httpSession, "Invalid User id");
             return "UsersPage";
         }
-        userService.setDisabled(id, !user.isDisabled());
-//        model.addAttribute("users", userService.findAll());
+        if (user.isDisabled() == disabled) {
+            userService.setDisabled(id, !disabled);
+        }
         setMessage(httpSession, "User " + id + " modified");
         return "redirect:/";
     }
