@@ -1,0 +1,224 @@
+:root {
+    --border-color: rgb(185, 185, 185);
+    --border-radius: 6px;
+    --black-color: #333;
+    --caption-color: #3B5998;
+    --box-padding: 0.5rem;
+    color: var(--black-color);
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+}
+
+html {
+    padding: 1rem;
+    min-width: 800px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+    :root {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 800px) {
+    :root {
+        font-size: 12px;
+    }
+}
+
+header {
+    position: relative;
+}
+
+header .languages {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+header .enter-or-register-box {
+    position: absolute;
+    top: 32px;
+    right: 0;
+}
+
+header nav {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 0.25rem;
+    margin-top: 1rem;
+}
+
+header nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin-left: 1rem;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: var(--black-color);
+    font-family: "Arial Narrow", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.middle {
+    margin: 1rem;
+    overflow: auto;
+}
+
+aside {
+    float: right;
+    width: 20rem;
+}
+
+main {
+    margin-right: 21rem;
+}
+
+footer {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--box-padding);
+    text-align: center;
+}
+
+aside section {
+    border: 1px solid var(--border-color);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+aside section .header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.25rem;
+    font-weight: bold;
+    color: var(--caption-color);
+}
+
+aside section .header:before {
+    content: "→";
+}
+
+aside section .body {
+    padding: 1rem;
+}
+
+aside section .footer {
+    border-top: 1px solid var(--border-color);
+    overflow: auto;
+    padding: 0.25rem;
+}
+
+aside section .footer a {
+    float: right;
+    font-size: 0.75rem;
+}
+
+aside section .footer a:after {
+    content: " →";
+}
+
+.login-form-box {
+    border: 1px solid var(--border-color);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    width: 30rem;
+    margin: auto;
+}
+
+.login-form-box .header {
+    font-weight: bold;
+    color: var(--caption-color);
+    padding: var(--box-padding);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.login-form-box .body .links {
+    text-align: right;
+    padding-bottom: var(--box-padding);
+    padding-right: var(--box-padding)
+}
+
+.body form {
+    height: 100%;
+}
+
+.body form .field 
+{
+    display: grid;
+    grid-template-columns:  1fr 2fr;
+    margin-top: 2rem;
+}
+
+.field .name {
+    text-align: right;
+    margin-right: 1rem;
+}
+
+.field .value {
+    margin-right: 3rem;
+}
+.value input {
+    width: 90%;
+    border: 1px solid var(--border-color);
+}
+
+.field .error {
+    grid-column: 2;
+    color: red;
+    justify-content: left;
+}
+
+.checkbox-field {
+    margin-left: 33%;
+    margin-top: 1rem
+}
+
+.button-field {
+    margin-top: 2rem;
+}
+
+.login-form-box .body form .button-field input {
+    background-color: rgb(239, 239, 239);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-left: 33%;
+}
+
+.login-form-box .footer {
+    border-top: 1px solid var(--border-color);
+    text-align: right;
+    position: relative;
+    /*width: 100%;*/
+    height: 1.5rem;
+    padding: 0.25rem;
+}
+
+.login-form-box .footer a {
+    margin: 0.25rem;
+    position: absolute;
+}
+
+.footer a:nth-child(1) {
+    right: 5px;
+}
+
+.footer a:nth-child(2) {
+    right: 6.5rem;
+}
+.footer a:nth-child(3) {
+    margin-right: 5px;
+    right: 14.25rem;
+}

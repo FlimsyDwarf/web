@@ -1,0 +1,82 @@
+.username_posts {
+    font-weight: bold;
+    font-size: 1.4rem!important;
+    margin-bottom: 2rem;
+
+}
+.middle main article {
+    margin-bottom: 2rem;
+}
+
+.middle main article .body {
+    border-left : thick solid var(--border-color);
+    padding-left: 1rem;
+}
+
+.middle main article .title {
+    color: var(--caption-color);
+    font-weight: bold;
+    font-size: 1.4rem!important;
+}
+
+.middle main article .information {
+    color: var(--notice-color);
+}
+
+
+.middle main article .attachment {
+    padding-left: 16px;
+}
+
+.middle main article .attachment li {
+    color: var(--notice-color);
+    padding-left: 0.5rem;
+}
+
+.middle main article .attachment li::marker {
+    content: url('../img/paperclip-16x16.png');
+}
+
+.middle main article .footer {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    position: relative;
+    padding: 0.25rem;
+}
+.middle main article .footer {
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+
+.middle main article .footer .right {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 10rem;
+}
+
+.middle main article .footer .left {
+    position: absolute;
+    width: 100px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.middle main article .footer .left [title="Vote Dowm"] {
+}
+
+.middle main article .footer .left span {
+    color: green;
+    font-weight: bold;
+}

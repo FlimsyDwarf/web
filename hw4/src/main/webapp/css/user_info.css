@@ -1,0 +1,32 @@
+.user_table {
+    border: var(--boder);
+    border-radius: var(--border-radius);
+    position: relative;
+    height: 8rem;
+    padding: 0.5rem;
+}
+
+.user_table .user_name {
+    font-size: 2rem;
+}
+
+.user_table img {
+    float: right;
+}
+
+.user_table ul {
+    margin-top: 1rem;
+    /*color: #777;*/
+}
+
+.arrows {
+    font-size: 2rem;
+
+}
+.arrows a {
+    text-decoration: none;
+}
+
+.arrows span {
+    color: var(--border-color);
+}
