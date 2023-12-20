@@ -138,3 +138,7 @@ aside section .footer a:after {
     background-color: var(--message-background-color);
     text-align: center;
 }
+
+.body {
+    white-space: pre-line;
+}

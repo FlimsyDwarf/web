@@ -3,7 +3,7 @@
         <Sidebar :posts="viewPosts" :users="users"/>
         <main>
             <Index v-if="page === 'Index'" :users="users" :posts="posts" :comments="comments"/>
-            <PostPage v-if="page === 'PostPage'" :user="user" :post="post" :comments="comments"/>
+            <PostPage v-if="page === 'PostPage'" :users="users" :post="post" :comments="Object.values(this.comments).filter(comment => comment.postId === post.id)"/>
             <Enter v-if="page === 'Enter'"/>
             <Register v-if="page === 'Register'"/>
             <WritePost v-if="page === 'WritePost'"/>
@@ -42,18 +42,20 @@ export default {
         Sidebar,
         EditPost,
     },
-    props: ["posts", "users", "comments"],
+    props: ["posts", "users", "comments", "userId"],
+  methods: {
+    filteredComments: function (post) {
+      return Object.values(this.comments).filter(comment => comment.postId === post.id);
+    }
+  },
     computed: {
         viewPosts: function () {
             return Object.values(this.posts).sort((a, b) => b.id - a.id).slice(0, 2);
         }
     }, beforeCreate() {
-        this.$root.$on("onChangePage", (page) => this.page = page);
-        this.$root.$on("onPostPage", (post, user) => {
+        this.$root.$on("onChangePage", (page) =>{ this.page = page});
+        this.$root.$on("onPostPage", (post) => {
           this.post = post;
-          this.user = user;
-          console.log(post);
-          console.log(user);
           this.page = "PostPage";
         });
     },

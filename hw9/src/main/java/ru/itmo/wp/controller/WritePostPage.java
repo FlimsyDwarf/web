@@ -3,7 +3,9 @@ package ru.itmo.wp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.itmo.wp.domain.Post;
@@ -26,6 +28,12 @@ public class WritePostPage extends Page {
         this.userService = userService;
         this.postDataValidator = postDataValidator;
     }
+
+//    @InitBinder("enterForm")
+//    public void initBinder(WebDataBinder binder) {
+//        binder.addValidators(postDataValidator);
+//    }
+
 
     @AnyRole({Role.Name.WRITER, Role.Name.ADMIN})
     @GetMapping("/writePost")

@@ -42,6 +42,8 @@ export default {
         onWritePost: function () {
             this.error = "";
             this.$root.$emit("onWritePost", this.title, this.text);
+            this.text = "";
+            this.title = "";
         }
     },
     beforeMount() {

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Post :user="user" :post="post" :comments="comments"/>
+    <Post :user="users[post.userId]" :post="post" :comments="comments"/>
     <div class="form">
-      <div class="header">Write Post</div>
+      <div class="header">Write Comment</div>
       <div class="body">
         <form @submit.prevent="onWriteComment">
           <div class="field">
@@ -21,9 +21,9 @@
       </div>
     </div>
 
-      <article v-for="comment in filteredComments" :key="comment.id">
+      <article v-for="comment in comments" :key="comment.id">
         <div class="title">
-          by {{user.login}}
+          by {{users[comment.userId].login}}
         </div>
         <div class="body">
           {{comment.text}}
@@ -36,7 +36,7 @@
 import Post from "@/components/page/Post.vue";
 export default {
   name: "PostPage",
-  props: ["post", "user", "comments", "userId"],
+  props: ["post", "users", "comments"],
   data: function () {
     return {
       error: "",
@@ -45,15 +45,12 @@ export default {
   },
   components: {Post},
   computed: {
-    filteredComments: function () {
-      return Object.values(this.comments).filter(comment => comment.postId === this.post.id);
-    },
-
   },
   methods: {
     onWriteComment: function () {
       this.error = "";
       this.$root.$emit("onWriteComment", this.post.id, this.text);
+      this.text = ""
     },
   },
   beforeMount() {
@@ -63,10 +60,10 @@ export default {
 </script>
 
 <style scoped>
-  .form {
+.form {
     margin-bottom: 1rem;
   }
-  textarea {
+textarea {
     resize: none;
   }
 </style>
