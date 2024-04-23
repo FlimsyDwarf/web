@@ -1,5 +1,8 @@
 package ru.itmo.wp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -27,9 +30,13 @@ public class Comment {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "post_id", nullable = false)
 	private Post post;
+
+	@CreationTimestamp
+	private Date creationTime;
 
 	public long getId() {
 		return id;
@@ -62,5 +69,13 @@ public class Comment {
 
 	public void setPost(Post post) {
 		this.post = post;
+	}
+
+	public Date getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
 	}
 }

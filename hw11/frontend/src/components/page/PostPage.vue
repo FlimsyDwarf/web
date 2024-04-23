@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Post :post="post"/>
+    <Post :post="truePost"/>
     <div class="form">
       <div class="header">Write Comment</div>
       <div class="body">
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <article v-for="comment in post.comments" :key="comment.id">
+    <article v-for="comment in truePost.comments" :key="comment.id">
       <div class="title">
         by {{comment.user.login}}
       </div>
@@ -34,6 +34,7 @@
 
 <script>
 import Post from "@/components/page/Post.vue";
+import axios from "axios";
 export default {
   name: "PostPage",
   props: ["post"],
@@ -41,6 +42,7 @@ export default {
     return {
       error: "",
       text: "",
+      truePost: ""
     }
   },
   components: {Post},
@@ -49,7 +51,7 @@ export default {
   methods: {
     onWriteComment: function () {
       this.error = "";
-      this.$root.$emit("onWriteComment", this.post.id, this.text);
+      this.$root.$emit("onWriteComment", this.post, this.text.trim());
       if (this.error === "") {
         this.text = "";
         this.title = "";
@@ -58,6 +60,17 @@ export default {
   },
   beforeMount() {
     this.$root.$on("onWriteCommentValidationError", error => this.error = error);
+
+    const postId = this.post.id;
+    // this.$root.$emit("onUpdatePosts")
+    this.truePost = this.post;
+    setInterval(() => {
+      axios.get("/api/1/post", {params: {
+          postId
+        }}).then(response => {
+        this.truePost = response.data;
+      });
+    }, 2000);
   }
 }
 </script>

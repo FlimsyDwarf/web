@@ -34,6 +34,11 @@ public class PostController {
         return postService.findAll();
     }
 
+    @GetMapping("post")
+    public Post findById(@RequestParam long postId) {
+        return postService.findById(postId);
+    }
+
     @PostMapping("posts/writePost")
     public void writePost(@RequestParam String jwt, @Valid @RequestBody Post post,
                               BindingResult bindingResult) {
@@ -50,6 +55,7 @@ public class PostController {
 
     @PostMapping("posts/writeComment")
     public void writeComment(@RequestParam String jwt, @Valid @RequestBody Comment comment,
+                           @RequestParam long postId,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
@@ -61,13 +67,16 @@ public class PostController {
         }
         Post post = null;
         try {
-            post = postService.findById(Long.parseLong(String.valueOf(user.getId())));
+            post = postService.findById(postId);
         } catch (NumberFormatException ignored) {}
         if (post == null) {
             bindingResult.addError(new ObjectError("no-post", "post doesn't exist"));
             throw new ValidationException(bindingResult);
         }
         comment.setUser(user);
+        comment.setPost(post);
+        post.addComment(comment);
         postService.writeComment(post, comment);
+//        userService.writePost(post, user);
     }
 }

@@ -29,11 +29,12 @@ export default {
     },
     beforeMount() {
         if (localStorage.getItem("jwt") && !this.user) {
-            this.$root.$emit("onJwt", localStorage.getItem("jwt"));
+          this.$root.$emit("onJwt", localStorage.getItem("jwt"));
         }
-        this.$root.$emit("onUpdatePosts")
-        this.$root.$emit("onUpdateUsers")
-        this.$root.$emit("onUpdateComments")
+        this.$root.$emit("onUpdateData")
+        setInterval(() => {
+          this.$root.$emit("onUpdateData")
+        }, 1000);
     },
     beforeCreate() {
         this.$root.$on("onEnter", (login, password) => {
@@ -115,19 +116,20 @@ export default {
           }
         });
 
-      this.$root.$on("onWriteComment", (postId, text) => {
+      this.$root.$on("onWriteComment", (post, text) => {
         if (this.user !== null) {
-          if (! (postId in this.posts)) {
-            this.$root.$emit("onWriteCommentValidationError", "No post with this id: " + postId);
+          if (! ((post.id - 1) in this.posts)) {
+            this.$root.$emit("onWriteCommentValidationError", "Post doesn't exist");
           } else if (!text || text.trim().length === 0) {
-            this.$root.$emit("onWriteCommentValidationError", "Text can't be blank" + postId);
+            this.$root.$emit("onWriteCommentValidationError", "Text can't be blank");
           } else {
             const jwt = localStorage.getItem("jwt")
+            const postId = post.id;
             axios.post("/api/1/posts/writeComment", {
-              text, postId
+              text, post
             }, {
               params: {
-                jwt
+                jwt, postId
               }
             }).then(() => {
               this.$root.$emit("onUpdateComments");
@@ -155,7 +157,14 @@ export default {
       this.$root.$on("onUpdateComments", () => {
         axios.get("/api/1/comments").then(response => {
           this.comments = response.data;
+        }).catch(error => {
+          this.$root.$emit("onUpdateCommentsError", error.response.data);
         });
+      });
+      this.$root.$on("onUpdateData", () => {
+        this.$root.$emit("onUpdatePosts")
+        this.$root.$emit("onUpdateUsers")
+        this.$root.$emit("onUpdateComments")
       });
 
     }

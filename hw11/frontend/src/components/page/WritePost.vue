@@ -42,7 +42,7 @@ export default {
     methods: {
         onWritePost: function () {
             this.error = "";
-            this.$root.$emit("onWritePost", this.title.trim(), this.text)
+            this.$root.$emit("onWritePost", this.title.trim(), this.text.trim())
             if (this.error === "") {
                 this.text = "";
                 this.title = "";

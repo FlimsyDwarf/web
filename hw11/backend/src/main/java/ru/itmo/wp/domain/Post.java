@@ -1,5 +1,6 @@
 package ru.itmo.wp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -24,7 +25,9 @@ public class Post {
     @Lob
     private String text;
 
+//    @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OrderBy("creationTime desc")
     private List<Comment> comments;
 
     @ManyToOne
